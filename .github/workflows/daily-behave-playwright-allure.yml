@@ -1,0 +1,98 @@
+name: Daily Behave Playwright Allure
+
+on:
+  schedule:
+    # Runs daily at 02:00 UTC
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      user_type:
+        description: "User type to run (student/faculty)"
+        required: false
+        default: "student"
+      feature_path:
+        description: "Feature file or folder to run"
+        required: false
+        default: "features/student.feature"
+
+permissions:
+  contents: read
+
+jobs:
+  behave-playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      PYTHONUNBUFFERED: "1"
+      USER_TYPE: ${{ github.event.inputs.user_type || 'student' }}
+      FEATURE_PATH: ${{ github.event.inputs.feature_path || 'features/student.feature' }}
+      HEADLESS: "true"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements.txt
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Install Playwright browser dependencies and Chromium
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Set up Node.js for Allure CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Allure CLI
+        run: npm install -g allure-commandline
+
+      - name: Run Behave tests and generate Allure results
+        id: behave
+        continue-on-error: true
+        run: |
+          mkdir -p reports/allure-results
+          python -m behave "$FEATURE_PATH" \
+            -f allure_behave.formatter:AllureFormatter \
+            -o reports/allure-results \
+            -f pretty
+
+      - name: Generate Allure HTML report
+        if: always()
+        run: |
+          mkdir -p reports/allure-report
+          allure generate reports/allure-results --clean -o reports/allure-report
+
+      - name: Upload Allure results artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: reports/allure-results
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload Allure HTML report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-html-report
+          path: reports/allure-report
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Fail workflow if Behave tests failed
+        if: steps.behave.outcome == 'failure'
+        run: |
+          echo "Behave tests failed. See Allure artifacts for details."
+          exit 1
