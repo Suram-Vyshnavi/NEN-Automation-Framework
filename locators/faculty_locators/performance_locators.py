@@ -1,0 +1,12 @@
+class performance_locators:
+    PERFORMANCE_SECTION="(//div[text()='Performance'])[1]"
+    PLEASE_SELECT_HEADING="//span[text()='Please select the following fields to get the reports:']"
+    PROGRAM_NAME="//p[text()='Program Name :']"
+    PROGRAM_COURSE="(//span[contains(@class,'ant-select-selection-item')])[1]"
+    PROGRAM_COURSE_OPTION="//span[text()=' Certification Logic - Test course 5']"
+    STATUS="//p[text()='Status :']"
+    STATUS_DROPDOWN="(//div[contains(@class,'ant-select-selector')])[2]"
+    STATUS_OPTION="//span[text()='Active']"
+    COHORT_NAME="//p[text()='Cohort Name :']"
+    COHORT_DROPDOWN="//div[contains(@class,'ant-select-selector')][3]"
+    PERFORMANCE_GRAPH="//div[@class='performance-graph']"
