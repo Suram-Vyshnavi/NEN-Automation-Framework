@@ -28,6 +28,8 @@ jobs:
       USER_TYPE: ${{ github.event.inputs.user_type || 'student' }}
       FEATURE_PATH: ${{ github.event.inputs.feature_path || 'features/student.feature' }}
       HEADLESS: "true"
+      TRACE_ON: "false"
+      ENV: "nen"
 
     steps:
       - name: Checkout repository
