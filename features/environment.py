@@ -50,26 +50,43 @@ def before_all(context):
             os.getenv("GITHUB_ACTIONS"),
             default=False,
         )
-        is_headless = True if is_ci else _env_to_bool(os.getenv("HEADLESS"), default=True)
+        is_headless = _env_to_bool(os.getenv("HEADLESS"), default=True)
+
+        browser_args = [
+            '--force-device-scale-factor=1',
+            '--high-dpi-support=1',
+            '--disable-blink-features=AutomationControlled',
+            '--use-fake-ui-for-media-stream',
+            '--use-fake-device-for-media-stream'
+        ]
+
+        # Linux CI-safe Chromium flags
+        if is_ci:
+            browser_args.extend([
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+            ])
+        else:
+            browser_args.append('--start-maximized')
 
         # Start browser
         context.playwright = sync_playwright().start()
         context.browser = context.playwright.chromium.launch(
             headless=is_headless,
             slow_mo=0 if is_headless else 1500,
-            args=[
-                '--start-maximized',
-                '--force-device-scale-factor=1',
-                '--high-dpi-support=1',
-                '--disable-blink-features=AutomationControlled',
-                '--use-fake-ui-for-media-stream',
-                '--use-fake-device-for-media-stream'
-            ]
+            args=browser_args
         )
-        context.browser_context = context.browser.new_context(
-            no_viewport=True
-        )
+
+        # no_viewport=True mimics a maximized headed window; use fixed viewport for headless CI.
+        context_options = {"no_viewport": True}
+        if is_headless:
+            context_options = {"viewport": {"width": 1920, "height": 1080}}
+
+        context.browser_context = context.browser.new_context(**context_options)
         context.page = context.browser_context.new_page()
+        print(f"Playwright launch mode: {'headless' if is_headless else 'headed'} (CI={is_ci})")
 
         # Ensure every click/fill interaction scrolls into view and highlights the target element
         # This wraps Playwright methods at runtime so page objects don't need to change.
