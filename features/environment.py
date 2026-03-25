@@ -19,8 +19,12 @@ def before_all(context):
     
     # Start browser
     context.playwright = sync_playwright().start()
+    headless_env = os.getenv("HEADLESS", "true").strip().lower()
+    is_headless = headless_env in ("1", "true", "yes", "y", "on")
+
     context.browser = context.playwright.chromium.launch(
-        headless=False, slow_mo=1500,
+        headless=is_headless,
+        slow_mo=0 if is_headless else 1500,
         args=[
             '--start-maximized',
             '--force-device-scale-factor=1',
