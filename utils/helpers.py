@@ -27,7 +27,7 @@ def highlight_element(page, locator, duration: int = 1500):
                 for i in range(count):
                     single_element = element.nth(i)
                     try:
-                        single_element.scroll_into_view_if_needed()
+                        single_element.scroll_into_view_if_needed(timeout=1000)
                         page.evaluate("""
                             (el) => {
                                 if (el) {
@@ -62,7 +62,7 @@ def highlight_element(page, locator, duration: int = 1500):
             pass
         
         # Single element highlighting
-        element.scroll_into_view_if_needed()
+        element.scroll_into_view_if_needed(timeout=1000)
         
         # Scroll up a bit to ensure title/heading is fully visible (not cut off at top)
         page.evaluate("window.scrollBy(0, -150)")

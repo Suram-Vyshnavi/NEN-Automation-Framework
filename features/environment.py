@@ -1,10 +1,31 @@
 from playwright.sync_api import sync_playwright
 import os
-from pages.Student.guest_page import GuestPage
 from pages.Student.login_page import LoginPage
 
 # Global flag to track if setup is done
 setup_complete = False
+
+
+def _env_to_bool(env_value, default=True):
+    if env_value is None:
+        return default
+    return str(env_value).strip().lower() in ("1", "true", "yes", "y", "on")
+
+
+def _safe_close(resource, name):
+    try:
+        if resource:
+            resource.close()
+    except Exception as exc:
+        print(f"Failed to close {name}: {exc}")
+
+
+def _safe_stop(playwright_obj):
+    try:
+        if playwright_obj:
+            playwright_obj.stop()
+    except Exception as exc:
+        print(f"Failed to stop Playwright: {exc}")
 
 def before_all(context):
     """Setup browser once before all tests"""
@@ -16,154 +37,173 @@ def before_all(context):
     from utils.config import Config
 
     global setup_complete
+
+    context.playwright = None
+    context.browser = None
+    context.browser_context = None
+    context.page = None
+    context.setup_failed = False
     
-    # Start browser
-    context.playwright = sync_playwright().start()
-    headless_env = os.getenv("HEADLESS", "true").strip().lower()
-    is_headless = headless_env in ("1", "true", "yes", "y", "on")
+    try:
+        # Force headless in CI environments (GitHub Actions, CI runners)
+        is_ci = _env_to_bool(os.getenv("CI"), default=False) or _env_to_bool(
+            os.getenv("GITHUB_ACTIONS"),
+            default=False,
+        )
+        is_headless = True if is_ci else _env_to_bool(os.getenv("HEADLESS"), default=True)
 
-    context.browser = context.playwright.chromium.launch(
-        headless=is_headless,
-        slow_mo=0 if is_headless else 1500,
-        args=[
-            '--start-maximized',
-            '--force-device-scale-factor=1',
-            '--high-dpi-support=1',
-            '--disable-blink-features=AutomationControlled',
-            '--use-fake-ui-for-media-stream',
-            '--use-fake-device-for-media-stream'
-        ]
-    )
-    context.browser_context = context.browser.new_context(
-        no_viewport=True
-    )
-    context.page = context.browser_context.new_page()
+        # Start browser
+        context.playwright = sync_playwright().start()
+        context.browser = context.playwright.chromium.launch(
+            headless=is_headless,
+            slow_mo=0 if is_headless else 1500,
+            args=[
+                '--start-maximized',
+                '--force-device-scale-factor=1',
+                '--high-dpi-support=1',
+                '--disable-blink-features=AutomationControlled',
+                '--use-fake-ui-for-media-stream',
+                '--use-fake-device-for-media-stream'
+            ]
+        )
+        context.browser_context = context.browser.new_context(
+            no_viewport=True
+        )
+        context.page = context.browser_context.new_page()
 
-    # Ensure every click/fill interaction scrolls into view and highlights the target element
-    # This wraps Playwright methods at runtime so page objects don't need to change.
-    from utils.helpers import highlight_element
-    from playwright.sync_api import Locator, Page
+        # Ensure every click/fill interaction scrolls into view and highlights the target element
+        # This wraps Playwright methods at runtime so page objects don't need to change.
+        from utils.helpers import highlight_element
+        from playwright.sync_api import Locator, Page
 
-    # Wrap Page.click to highlight before clicking
-    _orig_page_click = Page.click
-    def _highlighted_page_click(self, selector, *args, **kwargs):
-        try:
-            highlight_element(self, selector)
-        except Exception:
-            pass
-        return _orig_page_click(self, selector, *args, **kwargs)
-    Page.click = _highlighted_page_click
+        # Wrap Page.click to highlight before clicking
+        _orig_page_click = Page.click
+        def _highlighted_page_click(self, selector, *args, **kwargs):
+            try:
+                highlight_element(self, selector)
+            except Exception:
+                pass
+            return _orig_page_click(self, selector, *args, **kwargs)
+        Page.click = _highlighted_page_click
 
-    # Wrap Locator.click to highlight before clicking
-    _orig_locator_click = Locator.click
-    def _highlighted_locator_click(self, *args, **kwargs):
-        try:
-            highlight_element(self.page, self)
-        except Exception:
-            pass
-        return _orig_locator_click(self, *args, **kwargs)
-    Locator.click = _highlighted_locator_click
+        # Wrap Locator.click to highlight before clicking
+        _orig_locator_click = Locator.click
+        def _highlighted_locator_click(self, *args, **kwargs):
+            try:
+                highlight_element(self.page, self)
+            except Exception:
+                pass
+            return _orig_locator_click(self, *args, **kwargs)
+        Locator.click = _highlighted_locator_click
 
-    # Wrap Page.fill to highlight before filling
-    _orig_page_fill = Page.fill
-    def _highlighted_page_fill(self, selector, text, *args, **kwargs):
-        try:
-            highlight_element(self, selector)
-        except Exception:
-            pass
-        return _orig_page_fill(self, selector, text, *args, **kwargs)
-    Page.fill = _highlighted_page_fill
+        # Wrap Page.fill to highlight before filling
+        _orig_page_fill = Page.fill
+        def _highlighted_page_fill(self, selector, text, *args, **kwargs):
+            try:
+                highlight_element(self, selector)
+            except Exception:
+                pass
+            return _orig_page_fill(self, selector, text, *args, **kwargs)
+        Page.fill = _highlighted_page_fill
 
-    # Wrap Locator.fill to highlight before filling
-    _orig_locator_fill = Locator.fill
-    def _highlighted_locator_fill(self, text, *args, **kwargs):
-        try:
-            highlight_element(self.page, self)
-        except Exception:
-            pass
-        return _orig_locator_fill(self, text, *args, **kwargs)
-    Locator.fill = _highlighted_locator_fill
+        # Wrap Locator.fill to highlight before filling
+        _orig_locator_fill = Locator.fill
+        def _highlighted_locator_fill(self, text, *args, **kwargs):
+            try:
+                highlight_element(self.page, self)
+            except Exception:
+                pass
+            return _orig_locator_fill(self, text, *args, **kwargs)
+        Locator.fill = _highlighted_locator_fill
 
-    # Wrap Page.check/uncheck to highlight before interacting
-    _orig_page_check = Page.check
-    def _highlighted_page_check(self, selector, *args, **kwargs):
-        try:
-            highlight_element(self, selector)
-        except Exception:
-            pass
-        return _orig_page_check(self, selector, *args, **kwargs)
-    Page.check = _highlighted_page_check
+        # Wrap Page.check/uncheck to highlight before interacting
+        _orig_page_check = Page.check
+        def _highlighted_page_check(self, selector, *args, **kwargs):
+            try:
+                highlight_element(self, selector)
+            except Exception:
+                pass
+            return _orig_page_check(self, selector, *args, **kwargs)
+        Page.check = _highlighted_page_check
 
-    _orig_page_uncheck = Page.uncheck
-    def _highlighted_page_uncheck(self, selector, *args, **kwargs):
-        try:
-            highlight_element(self, selector)
-        except Exception:
-            pass
-        return _orig_page_uncheck(self, selector, *args, **kwargs)
-    Page.uncheck = _highlighted_page_uncheck
+        _orig_page_uncheck = Page.uncheck
+        def _highlighted_page_uncheck(self, selector, *args, **kwargs):
+            try:
+                highlight_element(self, selector)
+            except Exception:
+                pass
+            return _orig_page_uncheck(self, selector, *args, **kwargs)
+        Page.uncheck = _highlighted_page_uncheck
 
-    # Wrap Locator.check/uncheck to highlight before interacting
-    _orig_locator_check = Locator.check
-    def _highlighted_locator_check(self, *args, **kwargs):
-        try:
-            highlight_element(self.page, self)
-        except Exception:
-            pass
-        return _orig_locator_check(self, *args, **kwargs)
-    Locator.check = _highlighted_locator_check
+        # Wrap Locator.check/uncheck to highlight before interacting
+        _orig_locator_check = Locator.check
+        def _highlighted_locator_check(self, *args, **kwargs):
+            try:
+                highlight_element(self.page, self)
+            except Exception:
+                pass
+            return _orig_locator_check(self, *args, **kwargs)
+        Locator.check = _highlighted_locator_check
 
-    _orig_locator_uncheck = Locator.uncheck
-    def _highlighted_locator_uncheck(self, *args, **kwargs):
-        try:
-            highlight_element(self.page, self)
-        except Exception:
-            pass
-        return _orig_locator_uncheck(self, *args, **kwargs)
-    Locator.uncheck = _highlighted_locator_uncheck
+        _orig_locator_uncheck = Locator.uncheck
+        def _highlighted_locator_uncheck(self, *args, **kwargs):
+            try:
+                highlight_element(self.page, self)
+            except Exception:
+                pass
+            return _orig_locator_uncheck(self, *args, **kwargs)
+        Locator.uncheck = _highlighted_locator_uncheck
 
-    # Wrap Page.select_option to highlight before selecting
-    _orig_page_select_option = Page.select_option
-    def _highlighted_page_select_option(self, selector, *args, **kwargs):
-        try:
-            highlight_element(self, selector)
-        except Exception:
-            pass
-        return _orig_page_select_option(self, selector, *args, **kwargs)
-    Page.select_option = _highlighted_page_select_option
+        # Wrap Page.select_option to highlight before selecting
+        _orig_page_select_option = Page.select_option
+        def _highlighted_page_select_option(self, selector, *args, **kwargs):
+            try:
+                highlight_element(self, selector)
+            except Exception:
+                pass
+            return _orig_page_select_option(self, selector, *args, **kwargs)
+        Page.select_option = _highlighted_page_select_option
 
-    # Wrap Locator.select_option to highlight before selecting
-    _orig_locator_select_option = Locator.select_option
-    def _highlighted_locator_select_option(self, *args, **kwargs):
-        try:
-            highlight_element(self.page, self)
-        except Exception:
-            pass
-        return _orig_locator_select_option(self, *args, **kwargs)
-    Locator.select_option = _highlighted_locator_select_option
+        # Wrap Locator.select_option to highlight before selecting
+        _orig_locator_select_option = Locator.select_option
+        def _highlighted_locator_select_option(self, *args, **kwargs):
+            try:
+                highlight_element(self.page, self)
+            except Exception:
+                pass
+            return _orig_locator_select_option(self, *args, **kwargs)
+        Locator.select_option = _highlighted_locator_select_option
 
-    print("\n========== STEP 2: User Login ==========")
-    # Step 2: Perform login
-    login_page = LoginPage(context.page)
-    # Navigate back to base URL to find login button
-    context.page.goto(Config.BASE_URL)
-    login_page.click_login_button()
-    login_page.enter_credentials(Config.USERNAME, Config.PASSWORD)
-    login_page.click_sign_in_button()
-    
-    # Handle all 4 popups after login
-    login_page.handle_all_popups()
-    
-    # Validate successful login
-    login_page.validate_successful_login()
-    print("✓ User Login Completed")
-    
-    setup_complete = True
-    print("\n========== STEP 3: Running Test Scenarios ==========")
+        print("\n========== STEP 2: User Login ==========")
+        # Step 2: Perform login
+        login_page = LoginPage(context.page)
+        # Navigate back to base URL to find login button
+        context.page.goto(Config.BASE_URL)
+        login_page.click_login_button()
+        login_page.enter_credentials(Config.USERNAME, Config.PASSWORD)
+        login_page.click_sign_in_button()
+        
+        # Handle all 4 popups after login
+        login_page.handle_all_popups()
+        
+        # Validate successful login
+        login_page.validate_successful_login()
+        print("✓ User Login Completed")
+        
+        setup_complete = True
+        print("\n========== STEP 3: Running Test Scenarios ==========")
+    except Exception as exc:
+        context.setup_failed = True
+        print(f"before_all setup failed: {exc}")
+        # Keep hooks alive so after_all can complete and reports can still be generated.
 
 
 def before_scenario(context, scenario):
     """Skip setup scenarios as they're already done in before_all"""
+    if getattr(context, "setup_failed", False):
+        scenario.skip("Skipped because before_all setup failed")
+        return
+
     # Tag scenarios to identify which ones to skip
     if 'Validate Guest page' in scenario.name or 'Valid login' in scenario.name:
         scenario.skip("Already executed in before_all hook")
@@ -174,15 +214,17 @@ def after_all(context):
     print("\n========== STEP 4: User Logout ==========")
     
     try:
-        # Perform logout
-        login_page = LoginPage(context.page)
-        login_page.logout()
-        print("✓ User Logout Completed")
+        # Perform logout only when a page exists
+        if getattr(context, "page", None):
+            login_page = LoginPage(context.page)
+            login_page.logout()
+            print("✓ User Logout Completed")
+        else:
+            print("Skipping logout: page was not initialized")
     except Exception as e:
         print(f"Logout failed or not needed: {e}")
     
-    # Close browser
-    context.browser_context.close()
-    context.browser.close()
-    context.playwright.stop()
+    _safe_close(getattr(context, "browser_context", None), "browser context")
+    _safe_close(getattr(context, "browser", None), "browser")
+    _safe_stop(getattr(context, "playwright", None))
     print("\n========== Test Execution Complete ==========")

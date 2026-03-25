@@ -1,4 +1,5 @@
 from locators.faculty_locators.home_cohort_locators import home_cohort_locators
+from locators.common.header_locators import HeaderLocators
 from utils.helpers import attach_screenshot, highlight_element
 
 
@@ -6,6 +7,7 @@ class FacultyHomeCohortPage:
     def __init__(self, page):
         self.page = page
         self.locators = home_cohort_locators()
+        self.header_locators = HeaderLocators()
 
     def validate_cohorts_heading(self):
         """Validate that the Cohorts heading is visible on the home page"""
@@ -73,9 +75,9 @@ class FacultyHomeCohortPage:
 
     def click_inactive_tab(self):
         """Navigate to home and click on the Inactive tab in Cohorts section"""
-        home_header = self.page.locator(self.locators.HOME_HEADER)
+        home_header = self.page.locator(self.header_locators.HOME_HEADER)
         home_header.wait_for(state="visible", timeout=10000)
-        self.page.click(self.locators.HOME_HEADER)
+        self.page.click(self.header_locators.HOME_HEADER)
         attach_screenshot(self.page, "Navigated Back to Home Page")
 
         inactive_tab = self.page.locator(self.locators.INACTIVE_TAB)

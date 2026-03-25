@@ -11,3 +11,17 @@ Feature: Faculty
         Then user clicks on create new cohort button
         Then user fills all the details and create new cohort
         Then user navigates to home page
+    
+    Scenario: Performance page validation
+        Given user is on home page
+        Then user clicks on performance tab
+        Then user validates please select the following fields to get the reports heading
+        Then user validates program name dropdown and selects the option
+        Then user validates status dropdown and selects the option
+        Then user validates cohort name dropdown and selects the option
+        Then user validates cohort quiz card details and toggle switch button
+        Then user validates milestone card details and milestone toggle switch button
+        Then user clicks on download cohort performance button
+        Then user navigates to home page
+
+        
