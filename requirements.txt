@@ -1,6 +1,0 @@
-playwright
-behave
-allure-behave
-behave-html-formatter
-python-dotenv
-PyYAML
