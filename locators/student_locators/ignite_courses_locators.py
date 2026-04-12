@@ -1,5 +1,6 @@
 class ignite_courses_locators:
-    GO_TO_JOURNEY="(//span[text()='Go to Course'])[position()=2]"
+    #dev GO_TO_JOURNEY="(//span[text()='Go to Course'])[position()=2]"
+    GO_TO_JOURNEY="(//span[text()='Go to Course'])[position()=1]"
     OVERVIEW="//P[text()='Overview']"
     COURSE_CONTENT="//P[text()='Course Content']"
     RESUME_BUTTON="//span[text()='Resume']"

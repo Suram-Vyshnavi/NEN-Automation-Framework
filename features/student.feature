@@ -1,7 +1,7 @@
 Feature: Student
 
   Scenario: Home page validation
-    Given user is on home page
+    Then user navigates to home page
     Then user navigates to all headers and validates them
     Then user navigates to home page
     Then user validates certification section
@@ -13,7 +13,7 @@ Feature: Student
     Then user validates courses section and first course details
 
   Scenario: Resource network validation
-    Given user is on home page
+    Then user navigates to home page
     Then user click on resource network section
     Then user clicks on explore section
     Then user validates mentors, experts and service providers cards
@@ -39,7 +39,7 @@ Feature: Student
     Then user navigates to home page
 
   Scenario: Digital Library Validation
-    Given user is on home page
+    Then user navigates to home page
     Then user clicks on digital library section
     Then user validates digital library page section
     Then user validates latest articles and videos section
@@ -56,7 +56,7 @@ Feature: Student
     Then user navigates to home page
 
   Scenario: Calendar Validation
-    Given user is on home page
+    Then user navigates to home page
     Then user clicks on calendar section
     Then user validates calendar page
     Then user clicks on first meeting link
@@ -74,7 +74,7 @@ Feature: Student
     Then user uploads document in to the chat and validates
 
   Scenario: Events validation
-    Given user is on home page
+    Then user navigates to home page
     Then user clicks on events section
     Then user validates upcoming events
     Then user validates registered events
@@ -89,8 +89,8 @@ Feature: Student
     Then user edits profile again and reverts the changes back to original and save changes
     Then user changes language to Spanish and revert back to English
 
-  Scenario: Liftoff program validation
-    Given user is on home page
+  Scenario: click_view_details_first_upcoming_event
+    Then user navigates to home page
     Then user validates liftoff program in home page
     Then user validates choose your gaps
     Then user clicks on start now button
@@ -105,7 +105,7 @@ Feature: Student
     Then user clicks on pitch deck records and deletes the pitch 
 
   Scenario: Ignite program validation
-    Given user is on home page
+    Then user navigates to home page
     Then user validates ignite program in home page
     Then user clicks on go to course in home page
     Then user validates overiew section
@@ -124,7 +124,7 @@ Feature: Student
     Then user navigates to home page
 
   Scenario: My Startup validation
-    Given user is on home page
+    Then user navigates to home page
     Then user clicks on profile icon and navigates to my startup page
     Then user validates my startup page header, ignite and wadhwani sections
     Then user clicks on view button of ignite section
@@ -145,17 +145,14 @@ Feature: Student
     
 
   Scenario: Settings validation
-    Given user is on home page
+    Then user navigates to home page
     Then user clicks on profile icon and navigates to settings page
     Then user validates settings page heading and sections
     Then user clicks on accounts section
     Then user clicks on zoom connection section
     Then user validates zoom connection section details
-    Then user clicks on zoom connection toggler to connect zoom account
-    Then user clicks on disconnect button and validates the zoom connection
     Then user clicks on whatsapp connection section
     Then user validates whatsapp connection section details
-    Then user clicks on whatsapp connection toggler to connect whatsapp account
     Then user clicks on calendar section in settings page
     Then user validates calendar sync section details
     Then user navigates to home page

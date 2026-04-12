@@ -1,0 +1,10 @@
+class HeaderLocators:
+    HOME_HEADER = "(//div[text()='Home'])[1]"
+    RESOURCE_NETWORK_HEADER = "(//div[text()='Resource Network'])[1]"
+    DIGITAL_LIBRARY_HEADER = "(//div[text()='Digital Library'])[1]"
+    CALENDAR_HEADER = "(//div[text()='Calendar'])[1]"
+    EVENTS_HEADER = "(//div[text()='Events'])[1]"
+    CHAT_BADGE_HEADER = "//span[@class='ant-badge chat_badge']"
+    NOTIFICATION_BADGE_HEADER = "//span[@class='ant-badge notification__badge']"
+    NOTIFICATION_CLOSE = "//img[@class='notification__title__cross']"
+    PROFILE_MENU_HEADER = "//div[@class='ml-3 profile_container']"

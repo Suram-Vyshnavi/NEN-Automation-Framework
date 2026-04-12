@@ -1,5 +1,5 @@
 class my_startup_locators:
-    PROFILE_ICON="//span[text()='VS']"
+    PROFILE_ICON="//div[@class='ml-3 profile_container']"
     MY_STARTUP_HEADER="//h1[text()='My Startup']"
     IGNITE_HEADER="(//span[text()='ignite'])[1]"
     WADHWANI="(//span[text()='wadhwani'])[1]"

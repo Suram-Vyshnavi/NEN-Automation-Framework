@@ -1,26 +1,13 @@
-from behave import given, then
+from behave import then
 from pages.Student.home_page import HomePage
-
-
-@given("user is on home page")
-def user_on_home_page(context):
-    """User is already on home page after login and popup handling"""
-    if not hasattr(context, 'home_page'):
-        context.home_page = HomePage(context.page)
-    # Handle all 4 popups that appear after login
-    context.home_page.handle_all_popups()
 
 
 @then("user navigates to all headers and validates them")
 def navigate_and_validate_all_headers(context):
     """Navigate to and validate all header elements"""
+    if not hasattr(context, 'home_page'):
+        context.home_page = HomePage(context.page)
     context.home_page.navigate_and_validate_all_headers()
-
-
-@then("user navigates to home page")
-def navigate_to_home_page(context):
-    """Navigate back to home page"""
-    context.home_page.navigate_to_home_page()
 
 
 @then("user validates certification section")

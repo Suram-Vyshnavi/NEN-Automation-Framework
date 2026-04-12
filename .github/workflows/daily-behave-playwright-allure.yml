@@ -64,9 +64,12 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p reports/allure-results
+          mkdir -p reports/html-report
           python -m behave "$FEATURE_PATH" \
             -f allure_behave.formatter:AllureFormatter \
             -o reports/allure-results \
+            -f behave_html_formatter:HTMLFormatter \
+            -o reports/html-report/report.html \
             -f pretty
 
       - name: Generate Allure HTML report
@@ -90,6 +93,15 @@ jobs:
         with:
           name: allure-html-report
           path: reports/allure-report
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload standalone HTML report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: reports/html-report/report.html
           if-no-files-found: warn
           retention-days: 14
 
