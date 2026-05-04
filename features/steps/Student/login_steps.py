@@ -1,5 +1,5 @@
 from behave import given, then
-from pages.Student.login_page import LoginPage
+from pages.common.login_page import LoginPage
 from utils.config import Config
 
 

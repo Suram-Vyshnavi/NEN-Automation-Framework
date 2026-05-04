@@ -1,0 +1,13 @@
+class viabilityHomepageLocators:
+    HOME = "(//div[text()='Home'])[1]"
+    HOMEPAGE_CARD = "//div[@class='welcome-card-container']"
+    RESOURCE_HEADING = "//h3[@class='h3 bold resources-heading']"
+    EVALUATE_BUTTON = "//span[text()='Evaluate']"
+    VENTURE_CARD = "//div[@class='venture-info']"
+    SUBMISSIONS_EVALUATION_HEADINGS = "//div[text()='Submissions & Evaluation']"
+    INSTRUCTIONS_HEADINGS = "//div[text()='Instructions']"
+    VIEW_FILE_LINK = "//h6[text()='Please click here to view the file']"
+    EVALUATE_HEADING = "//h6[text()='Evaluate']"
+    MY_RATINGS_HEADING = "//p[text()='My Ratings']"
+    MILESTONE_FORM_SECTION = "(//div[@class='formSect'])[1]"
+    MILESTONE_NEXT_FORM = "(//div[@class='formSect'])[2]"

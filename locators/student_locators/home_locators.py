@@ -8,7 +8,7 @@ class HomeLocators:
     NOTIFICATION_BADGE_HEADER = "//span[@class='ant-badge notification__badge']"
     NOTIFICATION_CLOSE = "//img[@class='notification__title__cross']"
     PROFILE_MENU_HEADER = "//div[@class='ml-3 profile_container']"
-    CERTIFICATION_SECTION = "//h3[contains(text(),'Certification Logic')]"
+    CERTIFICATION_SECTION = "(//h3[contains(text(),'Certification Logic')])[1]"
     PERSONALIZED_JOURNEY_SECTION = "//span[text()='Go to your Program Journey']"
     FEATURED_RESOURCE_NETWORK_SECTION = "//h4[text()='Featured Resource Network']"
     MENTOR_CARD = "(//div[@class='mentor-detail'])[1]"

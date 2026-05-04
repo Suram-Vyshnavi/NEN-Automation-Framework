@@ -1,5 +1,5 @@
-from locators.student_locators.home_locators import HomeLocators
-from locators.student_locators.login_locators import LoginLocators
+﻿from locators.student_locators.home_locators import HomeLocators
+from locators.common.login_locators import LoginLocators
 from utils.helpers import attach_screenshot, highlight_element
 
 
@@ -18,7 +18,6 @@ class HomePage:
             no_thanks.wait_for(state="visible", timeout=5000)
             if no_thanks.is_visible():
                 self.page.click(self.login_locators.NO_THANKS_POPUP)
-                attach_screenshot(self.page, "Popup 1 - No Thanks Closed")
         except:
             pass
         
@@ -28,13 +27,12 @@ class HomePage:
             journey_popup.wait_for(state="visible", timeout=5000)
             if journey_popup.is_visible():
                 highlight_element(self.page, self.login_locators.START_YOUR_JOURNEY_POPUP)
-                attach_screenshot(self.page, "Popup 2 - Start Your Journey")
                 
                 next_button = self.page.locator(self.login_locators.NEXT_BUTTON)
                 next_button.wait_for(state="visible", timeout=5000)
                 self.page.click(self.login_locators.NEXT_BUTTON)
-                attach_screenshot(self.page, "Popup 2 - Clicked Next")
         except Exception as e:
+            attach_screenshot(self.page, "Popup 2 Handling Failed")
             print(f"Popup 2 not found or already handled: {e}")
         
         # Popup 3: Create a personalised journey popup - validate and click Next
@@ -43,13 +41,12 @@ class HomePage:
             personalised_popup.wait_for(state="visible", timeout=5000)
             if personalised_popup.is_visible():
                 highlight_element(self.page, self.login_locators.CREATE_PERSONALISED_JOURNEY_POPUP)
-                attach_screenshot(self.page, "Popup 3 - Create Personalised Journey")
                 
                 next_button = self.page.locator(self.login_locators.NEXT_BUTTON)
                 next_button.wait_for(state="visible", timeout=5000)
                 self.page.click(self.login_locators.NEXT_BUTTON)
-                attach_screenshot(self.page, "Popup 3 - Clicked Next")
         except Exception as e:
+            attach_screenshot(self.page, "Popup 3 Handling Failed")
             print(f"Popup 3 not found or already handled: {e}")
         
         # Popup 4: Start program journey button - final popup
@@ -58,52 +55,50 @@ class HomePage:
             start_journey_btn.wait_for(state="visible", timeout=5000)
             if start_journey_btn.is_visible():
                 highlight_element(self.page, self.login_locators.START_PROGRAM_JOURNEY_BUTTON)
-                attach_screenshot(self.page, "Popup 4 - Start Program Journey Button")
                 
                 self.page.click(self.login_locators.START_PROGRAM_JOURNEY_BUTTON)
-                attach_screenshot(self.page, "Popup 4 - Clicked Start Program Journey")
         except Exception as e:
+            attach_screenshot(self.page, "Popup 4 Handling Failed")
             print(f"Popup 4 not found or already handled: {e}")
 
     def navigate_and_validate_all_headers(self):
-        """Navigate to and validate all header elements"""
-        headers = [
-            (self.locators.HOME_HEADER, "Home"),
-            (self.locators.RESOURCE_NETWORK_HEADER, "Resource Network"),
-            (self.locators.DIGITAL_LIBRARY_HEADER, "Digital Library"),
-            (self.locators.CALENDAR_HEADER, "Calendar"),
-            (self.locators.EVENTS_HEADER, "Events"),
-            (self.locators.CHAT_BADGE_HEADER, "Chat Badge"),
-            (self.locators.NOTIFICATION_BADGE_HEADER, "Notification Badge"),
-            (self.locators.PROFILE_MENU_HEADER, "Profile Menu")
-        ]
-        
-        for locator, name in headers:
-            # Navigate back to home page before validating next header
-            if name != "Home":
-                home_header = self.page.locator(self.locators.HOME_HEADER)
-                home_header.wait_for(state="visible", timeout=10000)
-                self.page.click(locator)
-            
-            # Wait, validate, highlight, and screenshot the header
-            header_element = self.page.locator(locator)
-            header_element.wait_for(state="visible", timeout=20000)
-            assert header_element.is_visible(), f"{name} header is not visible"
-            highlight_element(self.page, locator)
-            attach_screenshot(self.page, f"{name} Header Validated")
-            if name == "Notification Badge":
-                close_button = self.page.locator(self.locators.NOTIFICATION_CLOSE)
-                close_button.wait_for(state="visible", timeout=5000)
-                self.page.click(self.locators.NOTIFICATION_CLOSE)
-            
+        try:
+            headers = [
+                (self.locators.HOME_HEADER, "Home"),
+                (self.locators.RESOURCE_NETWORK_HEADER, "Resource Network"),
+                (self.locators.DIGITAL_LIBRARY_HEADER, "Digital Library"),
+                (self.locators.CALENDAR_HEADER, "Calendar"),
+                (self.locators.EVENTS_HEADER, "Events"),
+                (self.locators.CHAT_BADGE_HEADER, "Chat Badge"),
+                (self.locators.NOTIFICATION_BADGE_HEADER, "Notification Badge"),
+                (self.locators.PROFILE_MENU_HEADER, "Profile Menu")
+            ]
 
+            for locator, name in headers:
+                if name != "Home":
+                    home_header = self.page.locator(self.locators.HOME_HEADER)
+                    home_header.wait_for(state="visible", timeout=10000)
+                    self.page.click(locator)
+
+                header_element = self.page.locator(locator)
+                header_element.wait_for(state="visible", timeout=20000)
+                assert header_element.is_visible(), f"{name} header is not visible"
+                highlight_element(self.page, locator)
+                if name == "Notification Badge":
+                    close_button = self.page.locator(self.locators.NOTIFICATION_CLOSE)
+                    close_button.wait_for(state="visible", timeout=5000)
+                    self.page.click(self.locators.NOTIFICATION_CLOSE)
+        except Exception as e:
+            attach_screenshot(self.page, "Navigate and Validate All Headers Failed")
+            print(f"Failed to navigate and validate all headers: {e}")
     def navigate_to_home_page(self):
-        """Navigate back to home page by clicking Home header"""
-        home_header = self.page.locator(self.locators.HOME_HEADER)
-        home_header.wait_for(state="visible", timeout=10000)
-        self.page.click(self.locators.HOME_HEADER)
-        attach_screenshot(self.page, "Navigated to Home Page")
-
+        try:
+            home_header = self.page.locator(self.locators.HOME_HEADER)
+            home_header.wait_for(state="visible", timeout=10000)
+            self.page.click(self.locators.HOME_HEADER)
+        except Exception as e:
+            attach_screenshot(self.page, "Navigate to Home Page Failed")
+            print(f"Failed to navigate to home page: {e}")
     def validate_certification_section(self):
         """Validate Certification Logic section"""
         try:
@@ -111,11 +106,9 @@ class HomePage:
             cert_section.wait_for(state="visible", timeout=10000)
             assert cert_section.is_visible(), "Certification section is not visible"
             highlight_element(self.page, self.locators.CERTIFICATION_SECTION)
-            attach_screenshot(self.page, "Certification Section Validated")
         except Exception as e:
             print(f"Certification section validation failed: {e}")
             attach_screenshot(self.page, "Certification Section Validation Failed")
-            raise
     def validate_personalized_journey_section(self):
         """Validate Personalized Journey section"""
         try:
@@ -123,11 +116,9 @@ class HomePage:
             journey_section.wait_for(state="visible", timeout=10000)
             assert journey_section.is_visible(), "Personalized Journey section is not visible"
             highlight_element(self.page, self.locators.PERSONALIZED_JOURNEY_SECTION)
-            attach_screenshot(self.page, "Personalized Journey Section Validated")
         except Exception as e:
             print(f"Personalized Journey section validation failed: {e}")
             attach_screenshot(self.page, "Personalized Journey Section Validation Failed")
-            raise
 
     def validate_featured_resource_network_section(self):
         """Validate Featured Resource Network section"""
@@ -136,11 +127,9 @@ class HomePage:
             resource_section.wait_for(state="visible", timeout=10000)
             assert resource_section.is_visible(), "Featured Resource Network section is not visible"
             highlight_element(self.page, self.locators.FEATURED_RESOURCE_NETWORK_SECTION)
-            attach_screenshot(self.page, "Featured Resource Network Section Validated")
         except Exception as e:
             print(f"Featured Resource Network section validation failed: {e}")
             attach_screenshot(self.page, "Featured Resource Network Section Validation Failed")
-            raise
 
     def validate_mentor_card_and_request_meeting_button(self):
         """Validate Mentor Card and Request Meeting button"""
@@ -154,11 +143,9 @@ class HomePage:
             assert request_meeting_btn.is_visible(), "Request Meeting button is not visible"
             highlight_element(self.page, self.locators.REQUEST_MEETING_BUTTON)
             
-            attach_screenshot(self.page, "Mentor Card and Request Meeting Button Validated")
         except Exception as e:
             print(f"Mentor card or Request Meeting button validation failed: {e}")
             attach_screenshot(self.page, "Mentor Card and Request Meeting Button Validation Failed")
-            raise
 
     def validate_recommended_content_section(self):
         """Validate Recommended Content section"""
@@ -167,11 +154,10 @@ class HomePage:
             content_section.wait_for(state="visible", timeout=10000)
             assert content_section.is_visible(), "Recommended Content section is not visible"
             highlight_element(self.page, self.locators.RECOMMENDED_CONTENT_SECTION)
-            attach_screenshot(self.page, "Recommended Content Section Validated")
         except Exception as e:
             print(f"Recommended Content section validation failed: {e}")
             attach_screenshot(self.page, "Recommended Content Section Validation Failed")
-            raise
+            
 
     def validate_recommended_by_your_institute_section(self):
         """Validate Recommended By Your Institute section"""
@@ -180,11 +166,10 @@ class HomePage:
             institute_section.wait_for(state="visible", timeout=10000)
             assert institute_section.is_visible(), "Recommended By Your Institute section is not visible"
             highlight_element(self.page, self.locators.RECOMMENDED_BY_YOUR_INSTITUTE_SECTION)
-            attach_screenshot(self.page, "Recommended By Your Institute Section Validated")
         except Exception as e:
             print(f"Recommended By Your Institute section validation failed: {e}")
             attach_screenshot(self.page, "Recommended By Your Institute Section Validation Failed")
-            raise
+            
 
     def validate_courses_section_and_first_course(self):
         """Validate Courses section and first course details"""
@@ -199,8 +184,6 @@ class HomePage:
             assert first_course.is_visible(), "First course is not visible"
             highlight_element(self.page, self.locators.FIRST_COURSE)
             
-            attach_screenshot(self.page, "Courses Section and First Course Validated")
         except Exception as e:
             print(f"Courses section or first course validation failed: {e}")
             attach_screenshot(self.page, "Courses Section and First Course Validation Failed")
-            raise

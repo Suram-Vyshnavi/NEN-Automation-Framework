@@ -1,3 +1,4 @@
+from pages.common.guest_page import GuestPage
 from locators.student_locators.guest_locators import GuestLocators
 from utils.helpers import attach_screenshot, highlight_element
 

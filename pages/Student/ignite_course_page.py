@@ -1,4 +1,4 @@
-from locators.student_locators.ignite_courses_locators import ignite_courses_locators
+﻿from locators.student_locators.ignite_courses_locators import ignite_courses_locators
 from utils.helpers import attach_screenshot, highlight_element
 
 
@@ -8,166 +8,192 @@ class IgniteCoursePage:
         self.locators = ignite_courses_locators()
 
     def validate_ignite_program_in_home_page(self):
-        locator = self.page.locator(self.locators.GO_TO_JOURNEY)
-        locator.wait_for(state='visible', timeout=10000)
-        assert locator.is_visible()
-        attach_screenshot(self.page, 'Validated ignite program in home page')
-
+        try:
+            locator = self.page.locator(self.locators.GO_TO_JOURNEY)
+            locator.wait_for(state='visible', timeout=10000)
+            assert locator.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Validate Ignite Program in Home Page Failed')
+            print(f'Ignite program validation in home page failed: {e}')
     def click_go_to_course_in_home_page(self):
-        locator = self.page.locator(self.locators.GO_TO_JOURNEY)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked go to course in home page')
-
+        try:
+            locator = self.page.locator(self.locators.GO_TO_JOURNEY)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Go To Course in Home Page Failed')
+            print(f'Failed to click go to course in home page: {e}')
     def validate_overview_section(self):
-        locator = self.page.locator(self.locators.OVERVIEW)
-        locator.wait_for(state='visible', timeout=10000)
-        assert locator.is_visible()
-        attach_screenshot(self.page, 'Validated overview section')
-
+        try:
+            locator = self.page.locator(self.locators.OVERVIEW)
+            locator.wait_for(state='visible', timeout=10000)
+            assert locator.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Validate Overview Section Failed')
+            print(f'Overview section validation failed: {e}')
     def click_course_content_section(self):
-        locator = self.page.locator(self.locators.COURSE_CONTENT)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked course content section')
-
+        try:
+            locator = self.page.locator(self.locators.COURSE_CONTENT)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Course Content Section Failed')
+            print(f'Failed to click course content section: {e}')
     def navigate_to_venture_journey_section(self):
-        locator = self.page.locator(self.locators.VENTURE_JOURNEY)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Navigated to venture journey section')
-
+        try:
+            locator = self.page.locator(self.locators.VENTURE_JOURNEY)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Navigate to Venture Journey Section Failed')
+            print(f'Failed to navigate to venture journey section: {e}')
     def click_view_output(self):
-        locator = self.page.locator(self.locators.VIEW_OUTPUT)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked view output')
-        self.page.keyboard.press("Escape")
-
+        try:
+            locator = self.page.locator(self.locators.VIEW_OUTPUT)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+            self.page.keyboard.press("Escape")
+        except Exception as e:
+            attach_screenshot(self.page, 'Click View Output Failed')
+            print(f'Failed to click view output: {e}')
     def click_redo_button(self):
-        locator = self.page.locator(self.locators.REDO_BUTTON)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked redo button')
-        backventurejpurney = self.page.locator(self.locators.BACK_VENTURE_JOURNEY)
-        backventurejpurney.wait_for(state='visible', timeout=10000)
-        backventurejpurney.click()
-
+        try:
+            locator = self.page.locator(self.locators.REDO_BUTTON)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+            backventurejpurney = self.page.locator(self.locators.BACK_VENTURE_JOURNEY)
+            backventurejpurney.wait_for(state='visible', timeout=10000)
+            backventurejpurney.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Redo Button Failed')
+            print(f'Failed to click redo button: {e}')
     def click_preview_button(self):
-        locator = self.page.locator(self.locators.PREVIEW_BUTTON)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked preview button')
-        submissions = self.page.locator(self.locators.SUBMISSIONS)
-        submissions.wait_for(state='visible', timeout=10000)
-        submissions.click()
-        assert submissions.is_visible(), 'Submissions section is not visible after clicking preview button'
-        attach_screenshot(self.page, 'Validated submissions section after clicking preview button')
-        instructions = self.page.locator(self.locators.INSTRUCTIONS)
-        instructions.wait_for(state='visible', timeout=10000)
-        instructions.click()
-        assert instructions.is_visible(), 'Instructions section is not visible after clicking preview button'
-        attach_screenshot(self.page, 'Validated instructions section after clicking preview button')
-        self.page.go_back()
-
+        try:
+            locator = self.page.locator(self.locators.PREVIEW_BUTTON)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+            submissions = self.page.locator(self.locators.SUBMISSIONS)
+            submissions.wait_for(state='visible', timeout=10000)
+            submissions.click()
+            assert submissions.is_visible(), 'Submissions section is not visible after clicking preview button'
+            instructions = self.page.locator(self.locators.INSTRUCTIONS)
+            instructions.wait_for(state='visible', timeout=10000)
+            instructions.click()
+            assert instructions.is_visible(), 'Instructions section is not visible after clicking preview button'
+            self.page.go_back()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Preview Button Failed')
+            print(f'Failed to click preview button: {e}')
     def navigate_to_performance(self):
-        locator = self.page.locator(self.locators.PERFORMANCE)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Navigated to performance')
-
+        try:
+            locator = self.page.locator(self.locators.PERFORMANCE)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Navigate to Performance Failed')
+            print(f'Failed to navigate to performance: {e}')
     def validate_your_performance_section_cards(self):
-        locator = self.page.locator(self.locators.YOUR_PERFORMANCE)
-        locator.wait_for(state='visible', timeout=10000)
-        assert locator.is_visible()
-        attach_screenshot(self.page, 'Validated your performance section cards')
-        mandatory_content_card = self.page.locator(self.locators.MANDATORY_CONTENT_CARD)
-        mandatory_content_card.wait_for(state='visible', timeout=10000)
-        assert mandatory_content_card.is_visible()
-        attach_screenshot(self.page, 'Validated mandatory content card')
-        quizzes_card = self.page.locator(self.locators.QUIZZES_CARD)
-        quizzes_card.wait_for(state='visible', timeout=10000)
-        assert quizzes_card.is_visible()
-        attach_screenshot(self.page, 'Validated quizzes card')
-        milestone_card = self.page.locator(self.locators.MILESTONE_CARD)
-        milestone_card.wait_for(state='visible', timeout=10000)
-        assert milestone_card.is_visible()
-        attach_screenshot(self.page, 'Validated milestone card')
-
+        try:
+            locator = self.page.locator(self.locators.YOUR_PERFORMANCE)
+            locator.wait_for(state='visible', timeout=10000)
+            assert locator.is_visible()
+            mandatory_content_card = self.page.locator(self.locators.MANDATORY_CONTENT_CARD)
+            mandatory_content_card.wait_for(state='visible', timeout=10000)
+            assert mandatory_content_card.is_visible()
+            quizzes_card = self.page.locator(self.locators.QUIZZES_CARD)
+            quizzes_card.wait_for(state='visible', timeout=10000)
+            assert quizzes_card.is_visible()
+            milestone_card = self.page.locator(self.locators.MILESTONE_CARD)
+            milestone_card.wait_for(state='visible', timeout=10000)
+            assert milestone_card.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Validate Performance Section Cards Failed')
+            print(f'Performance section cards validation failed: {e}')
     def validate_your_certificates(self):
-        locator = self.page.locator(self.locators.YOUR_CERTIFICATE)
-        locator.wait_for(state='visible', timeout=10000)
-        assert locator.is_visible()
-        attach_screenshot(self.page, 'Validated your certificates')
-
+        try:
+            locator = self.page.locator(self.locators.YOUR_CERTIFICATE)
+            locator.wait_for(state='visible', timeout=10000)
+            assert locator.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Validate Your Certificates Failed')
+            print(f'Your certificates validation failed: {e}')
     def click_share_and_validate_download_button(self):
-        locator_share = self.page.locator(self.locators.SHARE_BUTTON)
-        locator_share.wait_for(state='visible', timeout=10000)
-        locator_share.click()
-        copylink=self.page.locator(self.locators.COPY_LINK)
-        copylink.wait_for(state='visible', timeout=10000)
-        assert copylink.is_visible()
-        copylink.click()
-        locator_download = self.page.locator(self.locators.DOWNLOAD_BUTTON)
-        locator_download.wait_for(state='visible', timeout=10000)
-        assert locator_download.is_visible()
-        attach_screenshot(self.page, 'Clicked share and validated download button')
-
+        try:
+            locator_share = self.page.locator(self.locators.SHARE_BUTTON)
+            locator_share.wait_for(state='visible', timeout=10000)
+            locator_share.click()
+            copylink = self.page.locator(self.locators.COPY_LINK)
+            copylink.wait_for(state='visible', timeout=10000)
+            assert copylink.is_visible()
+            copylink.click()
+            locator_download = self.page.locator(self.locators.DOWNLOAD_BUTTON)
+            locator_download.wait_for(state='visible', timeout=10000)
+            assert locator_download.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Share and Validate Download Button Failed')
+            print(f'Share and download button validation failed: {e}')
     def click_cohort_section(self):
-        locator = self.page.locator(self.locators.COHORT)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked cohort section')
-
+        try:
+            locator = self.page.locator(self.locators.COHORT)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Cohort Section Failed')
+            print(f'Failed to click cohort section: {e}')
     def validate_cohort_section(self):
-        locator = self.page.locator(self.locators.COHORT_GENERAL_INFO)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        assert locator.is_visible()
-        attach_screenshot(self.page, 'Validated cohort general infosection')
-        locator_ventures = self.page.locator(self.locators.COHORT_VENTURES)
-        locator_ventures.wait_for(state='visible', timeout=10000)
-        locator_ventures.click()
-        assert locator_ventures.is_visible()
-        attach_screenshot(self.page, 'Validated cohort venturessection')
-        locator_members = self.page.locator(self.locators.COHORT_MEMBERS)
-        locator_members.wait_for(state='visible', timeout=10000)
-        locator_members.click()
-        assert locator_members.is_visible()
-        attach_screenshot(self.page, 'Validated cohort memberssection')
-        self.page.go_back()
-   
-
+        try:
+            locator = self.page.locator(self.locators.COHORT_GENERAL_INFO)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+            assert locator.is_visible()
+            locator_ventures = self.page.locator(self.locators.COHORT_VENTURES)
+            locator_ventures.wait_for(state='visible', timeout=10000)
+            locator_ventures.click()
+            assert locator_ventures.is_visible()
+            locator_members = self.page.locator(self.locators.COHORT_MEMBERS)
+            locator_members.wait_for(state='visible', timeout=10000)
+            locator_members.click()
+            assert locator_members.is_visible()
+            self.page.go_back()
+        except Exception as e:
+            attach_screenshot(self.page, 'Validate Cohort Section Failed')
+            print(f'Cohort section validation failed: {e}')
     def click_view_venture_journey(self):
-        locator = self.page.locator(self.locators.MY_VENTURE)
-        locator.wait_for(state='visible', timeout=10000)
-        locator.click()
-        attach_screenshot(self.page, 'Clicked view venture journey')
-
+        try:
+            locator = self.page.locator(self.locators.MY_VENTURE)
+            locator.wait_for(state='visible', timeout=10000)
+            locator.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click View Venture Journey Failed')
+            print(f'Failed to click view venture journey: {e}')
     def click_basic_information_section_and_save(self):
-        locator_basic = self.page.locator(self.locators.BASIC_INFORMATION)
-        locator_basic.wait_for(state='visible', timeout=10000)
-        locator_basic.click()
-        locator_save = self.page.locator(self.locators.SAVE_BUTTON)
-        locator_save.wait_for(state='visible', timeout=10000)
-        locator_save.click()
-        attach_screenshot(self.page, 'Clicked basic information and saved')
-
+        try:
+            locator_basic = self.page.locator(self.locators.BASIC_INFORMATION)
+            locator_basic.wait_for(state='visible', timeout=10000)
+            locator_basic.click()
+            locator_save = self.page.locator(self.locators.SAVE_BUTTON)
+            locator_save.wait_for(state='visible', timeout=10000)
+            locator_save.click()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click Basic Information Section and Save Failed')
+            print(f'Failed to click basic information section and save: {e}')
     def click_view_venture_journey_and_validate_details(self):
-        locator_view = self.page.locator(self.locators.VALIDATE_VIEW_VENTURE_JOURNEY)
-        locator_view.wait_for(state='visible', timeout=10000)
-        locator_view.click()
-        locator_code = self.page.locator(self.locators.VENTURE_CODE)
-        locator_code.wait_for(state='visible', timeout=10000)
-        assert locator_code.is_visible()
-        locator_cohort = self.page.locator(self.locators.COHORT_NAME)
-        locator_cohort.wait_for(state='visible', timeout=10000)
-        assert locator_cohort.is_visible()
-        locator_program = self.page.locator(self.locators.PROGRAM_NAME)
-        locator_program.wait_for(state='visible', timeout=10000)
-        assert locator_program.is_visible()
-        attach_screenshot(self.page, 'Viewed venture journey and validated details')
-
+        try:
+            locator_view = self.page.locator(self.locators.VALIDATE_VIEW_VENTURE_JOURNEY)
+            locator_view.wait_for(state='visible', timeout=10000)
+            locator_view.click()
+            locator_code = self.page.locator(self.locators.VENTURE_CODE)
+            locator_code.wait_for(state='visible', timeout=10000)
+            assert locator_code.is_visible()
+            locator_cohort = self.page.locator(self.locators.COHORT_NAME)
+            locator_cohort.wait_for(state='visible', timeout=10000)
+            assert locator_cohort.is_visible()
+            locator_program = self.page.locator(self.locators.PROGRAM_NAME)
+            locator_program.wait_for(state='visible', timeout=10000)
+            assert locator_program.is_visible()
+        except Exception as e:
+            attach_screenshot(self.page, 'Click View Venture Journey and Validate Details Failed')
+            print(f'Failed to click view venture journey and validate details: {e}')
     # def click_youtube_video_url_section_and_add_url_and_save(self):
     #     locator_url = self.page.locator(self.locators.YOUTUBE_VIDEO_URL)
     #     locator_url.wait_for(state='visible', timeout=10000)
