@@ -1,5 +1,6 @@
 ﻿from locators.common.login_locators import LoginLocators
 from utils.helpers import attach_screenshot, highlight_element
+import os
 
 
 class LoginPage:
@@ -12,6 +13,7 @@ class LoginPage:
 			login_btn = self.page.locator(self.locators.LOGIN_BUTTON)
 			login_btn.wait_for(state="visible", timeout=10000)
 			self.page.click(self.locators.LOGIN_BUTTON)
+			self.page.click(self.locators.PROGRAM_MEMBER)
 		except Exception as e:
 			attach_screenshot(self.page, "Click Login Button Failed")
 			print(f"Failed to click login button: {e}")
@@ -92,10 +94,13 @@ class LoginPage:
 
 	def handle_all_popups(self):
 		self.handle_no_thanks_popup()
-		self.handle_start_journey_popup()
-		self.handle_personalised_journey_popup()
-		self.handle_start_program_journey_popup()
-		self.handle_get_started_popup()
+		USER_TYPE = os.getenv("USER_TYPE", "student").strip().lower()
+		USER_TYPE.lower()  # Ensure it's in lowercase for consistency
+		if "student" in USER_TYPE:
+			self.handle_start_journey_popup()
+			self.handle_personalised_journey_popup()
+			self.handle_start_program_journey_popup()
+			self.handle_get_started_popup()
 
 	def validate_successful_login(self):
 		try:

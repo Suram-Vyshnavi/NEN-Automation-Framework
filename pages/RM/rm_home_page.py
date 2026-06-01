@@ -116,19 +116,20 @@ class RMHomePage:
             deadline_input = self.page.locator(rm_locators.SUBMISSION_DEADLINE_INPUT)
             deadline_input.wait_for(state="visible", timeout=10000)
             deadline_input.click()
+            self.page.wait_for_timeout(800)
 
-            extended_submissiondate=self.extract_submission_date(submission_date)
-            deadline_input_click=self.page.locator(rm_locators.submission_deadline_date(extended_submissiondate))
+            extended_submissiondate = self.extract_submission_date(submission_date)
+            deadline_input_click = self.page.locator(rm_locators.submission_deadline_date(extended_submissiondate))
             deadline_input_click.wait_for(state="visible", timeout=10000)
             deadline_input_click.click()
 
             ok_btn = self.page.locator(rm_locators.OK_BUTTON)
-            if ok_btn.count() > 0:
-                ok_btn.click()
+            ok_btn.wait_for(state="visible", timeout=5000)
+            ok_btn.click()
 
             update_btn = self.page.locator(rm_locators.UPDATE_BUTTON)
-            if update_btn.count() > 0:
-                update_btn.click()
+            update_btn.wait_for(state="visible", timeout=5000)
+            update_btn.click()
         except Exception as e:
             attach_screenshot(self.page, "RM Click Milestone And Extend Deadline Failed")
             print(f"RM click milestone and extend deadline failed: {e}")

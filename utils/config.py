@@ -20,10 +20,10 @@ class Config:
     elif USER_TYPE == "student":
         USERNAME = "wadhwani.foundation99@gmail.com"
         PASSWORD = "Test@123"
-    elif USER_TYPE == "prodstudent":
+    elif USER_TYPE == "prod_student":
         USERNAME = "wadhwani.foundation99@gmail.com"
         PASSWORD = "Test@123"
-    elif USER_TYPE == "prodfaculty":
+    elif USER_TYPE == "prod_faculty":
         USERNAME = "fac-we-pkprod21@yopmail.com"
         PASSWORD = "Demo@123"
     elif USER_TYPE == "rm":
@@ -56,7 +56,7 @@ class Config:
     elif USER_TYPE == "prod_viability_specialist":
         USERNAME = "test-2@yopmail.com"
         PASSWORD = "Demo@123"
-    elif USER_TYPE == "cohort manager":
+    elif USER_TYPE == "cohort_manager":
         USERNAME = "liftoffsparkcohort10@yopmail.com"
         PASSWORD = "Demo@123"
     elif USER_TYPE == "prod_cohort_manager":

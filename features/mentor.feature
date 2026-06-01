@@ -33,6 +33,8 @@ Feature: Mentor
         Then user sends a message
         Then user validates the latest message sent
         Then user clicks on file upload button
+        Then user uploads photo in to chat and validates
+        Then user clicks on file upload button
         Then user uploads document in to the chat and validates
 
     Scenario: My Profile validation

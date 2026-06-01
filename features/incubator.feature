@@ -1,23 +1,23 @@
 Feature:Incubator
     Scenario: Incubator Cohorts validation
-        # Given user is on home page
-        # Then incubator user clicks on cohorts tab
-        # Then incubator user validates cohorts heading
-        # Then incubator user clicks on active tab
-        # Then incubator user clicks on 1 active cohort 
-        # Then incubator user validates all the tabs in cohort page
-        # Then incubator user clicks on general info tab
-        # Then incubator user validates batch faculty and message icon in general info tab
-        # Then incubator user validates cohort Activity 
-        # Then incubator user clicks on cohorts members tab
-        # Then incubator user validates cohort members heading
-        # Then incubator user validates student added and maximum allowed students details
-        # Then incubator user clicks on cohort startups
-        # Then incubator user validates cohort startups heading and startup details
-        # Then incubator user clicks on 1 cohort startup
-        # Then incubator user search for test cohort in cohorts
-        # Then incubator user clicks on inactive tab
-        # Then incubator user search for test cohort in cohorts
+        Given user is on home page
+        Then incubator user clicks on cohorts tab
+        Then incubator user validates cohorts heading
+        Then incubator user clicks on active tab
+        Then incubator user clicks on 1 active cohort 
+        Then incubator user validates all the tabs in cohort page
+        Then incubator user clicks on general info tab
+        Then incubator user validates batch faculty and message icon in general info tab
+        Then incubator user validates cohort Activity 
+        Then incubator user clicks on cohorts members tab
+        Then incubator user validates cohort members heading
+        Then incubator user validates student added and maximum allowed students details
+        Then incubator user clicks on cohort startups
+        Then incubator user validates cohort startups heading and startup details
+        Then incubator user clicks on 1 cohort startup
+        Then incubator user search for test cohort in cohorts
+        Then incubator user clicks on inactive tab
+        Then incubator user search for test cohort in cohorts
         Then incubator user clicks on create new cohort button
         Then incubator user fills all the details and create new cohort
         Then incubator user validates office hours section in cohort page
@@ -58,15 +58,15 @@ Feature:Incubator
         Then user clicks on calendar section
         Then user validates calendar page
 
-    # Scenario: Messages and discussions validation
-    #     Then user navigates to home page
-    #     Then user clicks on chat icon
-    #     Then user clicks on send message button
-    #     Then user clicks on first contact in the list
-    #     Then user sends a message
-    #     Then user validates the latest message sent
-    #     Then user clicks on file upload button
-    #     Then user uploads document in to the chat and validates
+    Scenario: Messages and discussions validation
+        Then user navigates to home page
+        Then user clicks on chat icon
+        Then user clicks on send message button
+        Then user clicks on first contact in the list
+        Then user sends a message
+        Then user validates the latest message sent
+        Then user clicks on file upload button
+        Then user uploads document in to the chat and validates
     
     Scenario: My Profile validation
         Then user clicks on profile icon and navigates to my profile page

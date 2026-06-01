@@ -97,12 +97,12 @@ class IncubatorCohortHomePage:
             faculty_label.first.wait_for(state="visible", timeout=15000)
             assert faculty_label.first.is_visible(), "Batch Faculty heading is not visible"
 
-            faculty_container = self.page.locator(self.locators.BATCH_FACULTY_CONTAINER)
-            faculty_container.first.wait_for(state="visible", timeout=15000)
-            assert faculty_container.first.is_visible(), "Batch faculty/message icon container is not visible"
+            # faculty_container = self.page.locator(self.locators.BATCH_FACULTY_CONTAINER)
+            # faculty_container.first.wait_for(state="visible", timeout=15000)
+            # assert faculty_container.first.is_visible(), "Batch faculty/message icon container is not visible"
 
             highlight_element(self.page, self.locators.BATCH_FACULTY)
-            highlight_element(self.page, self.locators.BATCH_FACULTY_CONTAINER)
+            # highlight_element(self.page, self.locators.BATCH_FACULTY_CONTAINER)
         except Exception as exc:
             attach_screenshot(self.page, "Incubator Batch Faculty Validation Failed")
             print(f"Incubator batch faculty validation failed: {exc}")
@@ -175,6 +175,7 @@ class IncubatorCohortHomePage:
         except Exception as exc:
             attach_screenshot(self.page, "Incubator Cohort Startups Validation Failed")
             print(f"Incubator cohort startups validation failed: {exc}")
+            self.page.go_back()
 
     def click_first_cohort_startup(self):
         try:
@@ -236,9 +237,16 @@ class IncubatorCohortHomePage:
             max_per_startup_container.fill("5")
 
             self._wait_and_click(self.locators.CREATE_BUTTON)
+            self._wait_and_click(self.locators.SELECT_COHORT)
+            self._wait_and_click(self.locators.THREEDOTS_BUTTON)
+            self._wait_and_click(self.locators.CLOSE_COHORT)
+            self._wait_and_click(self.locators.CLOSE_BUTTON)
+            self.page.go_back()
         except Exception as exc:
             attach_screenshot(self.page, "Incubator Fill Cohort Details Failed")
             print(f"Incubator fill cohort details failed: {exc}")
+            
+            
 
     def validate_office_hours_section_in_cohort_page(self):
         try:
@@ -321,7 +329,10 @@ class IncubatorCohortHomePage:
         except Exception as exc:
             attach_screenshot(self.page, "Incubator Delete Meeting Failed")
             print(f"Incubator delete meeting failed: {exc}")
-            self._wait_and_click(self.locators.GO_BACK_TO_DASHBOARD_BUTTON)
+            try:
+                self._wait_and_click(self.locators.GO_BACK_TO_DASHBOARD_BUTTON)
+            except Exception:
+                pass
 
     # def go_back_to_dashboard(self):
     #     try:

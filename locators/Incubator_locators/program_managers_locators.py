@@ -7,9 +7,9 @@ class program_managers_locators:
     LAST_NAME_INPUT = "//input[@name='lastName']"
     EMAIL_INPUT = "//input[@id='email']"
     MOBILE_NUMBER_INPUT = "//input[@placeholder='Mobile Number']"
-    SELECT_COUNTRY = "//label[text()='Select Country']"
-    INDIA_OPTION = "//span[text()='India']"
-    SELECT_CITY = "//div[contains(@class,'wf_animated')]//label[text()='Select City']"
-    BANGALORE_OPTION = "//span[text()='Bangalore, Bangalore, Karnataka, India']"
+    SELECT_COUNTRY = "//label[text()='Select Country']/following::div[contains(@class,'ant-select-selector')][1]"
+    INDIA_OPTION = "//div[contains(@class,'ant-select-item-option-content') and normalize-space()='India']"
+    SELECT_CITY = "//label[text()='Select City']/following::div[contains(@class,'ant-select-selector')][1]"
+    BANGALORE_OPTION = "//div[contains(@class,'ant-select-item-option-content') and contains(normalize-space(),'Bangalore')]"
     CREATE_BUTTON = "//span[text()='Create']"
     

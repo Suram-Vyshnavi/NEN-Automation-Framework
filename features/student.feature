@@ -156,12 +156,3 @@ Feature: Student
     Then user clicks on calendar section in settings page
     Then user validates calendar sync section details
     Then user navigates to home page
-
-
-
-
-
-
-    
-
-

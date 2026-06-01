@@ -64,7 +64,7 @@ def step_incubator_user_validates_batch_faculty_and_message_icon(context):
 @then("incubator user validates download excel in cohort dashboard")
 def step_incubator_user_validates_download_excel_in_cohort_dashboard(context):
     page = _get_incubator_page(context)
-    page.validate_download_excel_in_cohort_dashboard()
+    page.validate_cohort_activity()
     attach_screenshot(context.page, name="Incubator download excel validated", context=context)
 
 

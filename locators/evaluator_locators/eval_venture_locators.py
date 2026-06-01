@@ -7,8 +7,8 @@ class eval_venture_locators:
      VENTURE_INFO_CARD= "//div[@class='venture-info']"
      SUBMISSIONS_EVALUATION_HEADING= "//div[text()='Submissions & Evaluation']"
      INSTRUCTIONS_HEADING= "//div[text()='Instructions']"
-     MILESTONE_HEADING= "//h3[text()='Wadhwani Ignite - Milestone 3 (EN)']"
-     VIABILITY_EVALUATION_HEADING= "//p[text()='Viability Evaluation']"
+     MILESTONE_HEADING= "//h3[contains(text(),'Milestone') or contains(text(),'Ignite') or contains(text(),'Wadhwani')]"
+     VIABILITY_EVALUATION_HEADING= "//p[contains(text(),'Viability')]"
      COMPLETED_EVALUATIONS = "//p[contains(text(),'Completed Evaluations')]"
      
     

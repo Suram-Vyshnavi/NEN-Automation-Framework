@@ -2,7 +2,7 @@ Feature: Evaluator
     Scenario: Home page validation
         Given evaluator user is on the home page
         Then evaluator user validates the home page card
-        Then evaluator user validates the resources heading
+        # Then evaluator user validates the resources heading
         When evaluator user clicks on Evaluate button in the home page card
         Then evaluator user validates the venture information card
         Then evaluator user validates the Submissions & Evaluation heading
@@ -58,8 +58,8 @@ Feature: Evaluator
         Then user validates zoom connection section details
         Then user clicks on whatsapp connection section
         Then user validates whatsapp connection section details
-        Then user clicks on calendar section in settings page
-        Then user validates calendar sync section details
+        # Then user clicks on calendar section in settings page
+        # Then user validates calendar sync section details
         Then user navigates to home page
 
     

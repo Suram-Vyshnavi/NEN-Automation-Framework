@@ -7,15 +7,35 @@ class EvaluatorHomePage:
         self.page = page
         self.locators = eval_home_page_locators()
 
-    def _wait_and_assert_visible(self, locator, message, timeout=15000):
+    def _get_visible_element(self, locator, timeout=15000):
         target = self.page.locator(locator)
-        target.first.wait_for(state="visible", timeout=timeout)
-        assert target.first.is_visible(), message
+        elapsed = 0
+
+        while elapsed <= timeout:
+            count = target.count()
+            for idx in range(count):
+                candidate = target.nth(idx)
+                try:
+                    # Try to scroll into view and check visibility
+                    candidate.scroll_into_view_if_needed()
+                    if candidate.is_visible():
+                        return candidate
+                except Exception:
+                    # Element might have been removed, skip it
+                    continue
+
+            self.page.wait_for_timeout(200)
+            elapsed += 200
+
+        raise TimeoutError(f"No visible element found for locator: {locator} (checked {target.count()} matches)")
+
+    def _wait_and_assert_visible(self, locator, message, timeout=15000):
+        target = self._get_visible_element(locator, timeout=timeout)
+        assert target.is_visible(), message
 
     def _wait_and_click(self, locator, timeout=15000):
-        target = self.page.locator(locator)
-        target.first.wait_for(state="visible", timeout=timeout)
-        target.first.click()
+        target = self._get_visible_element(locator, timeout=timeout)
+        target.click()
 
     def validate_home_page_card(self):
         try:
@@ -30,6 +50,18 @@ class EvaluatorHomePage:
         
     def validate_resources_heading(self):
         try:
+            # Debug: List all visible headings on the page
+            all_h3s = self.page.locator("//h3").all()
+            print(f"\n=== DEBUG: Found {len(all_h3s)} h3 elements ===")
+            for idx, h3 in enumerate(all_h3s):
+                try:
+                    text = h3.text_content()
+                    is_vis = h3.is_visible()
+                    print(f"  [{idx}] '{text}' - visible={is_vis}")
+                except Exception as e:
+                    print(f"  [{idx}] Error: {e}")
+            print("=== END DEBUG ===\n")
+            
             self._wait_and_assert_visible(
                 self.locators.RESOURCES_HEADING,
                 "Resources heading is not visible",

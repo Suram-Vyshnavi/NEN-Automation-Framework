@@ -1,0 +1,30 @@
+class newuser_reg_locators:
+    LOGIN_BUTTON = "//button[text()='Login']"
+    SIGN_UP_BUTTON = "//span[text()='Sign Up']"
+    EMAIL_INPUT = "//input[@id='email']"
+    CREATE_BUTTON = "//span[text()='Create']"
+    ENTER_OTP = "//label[text()='Enter OTP']"
+    TOGGLE_EYE_IMAGE = "//img[@class='wf_image icon no-js-svg%3e']"
+    SUBMIT_BUTTON = "//span[text()='Submit']"
+    ADD_NEW_PASSWORD = "//input[@id='password1']"
+    CONFIRM_PASSWORD = "//input[@id='password2']"
+    TOGGLE_EYE_IMAGE_1 = "(//img[@class='wf_image icon no-js-svg%3e'])[1]"
+    TOGGLE_EYE_IMAGE_2 = "(//img[@class='wf_image icon no-js-svg%3e'])[2]"
+    CHECKBOX = "//input[@type='checkbox']"
+    CONFIRM_PASSWORD_BUTTON = "//span[text()='Confirm Password']"
+    FIRST_NAME = "//label[text()='First Name']"
+    LAST_NAME = "//label[text()='Last Name']"
+    SELECT_COUNTRY = "//label[text()='Select Country']"
+    INDIA_OPTION = "//span[@title='India']"
+    SELECT_CITY = "//label[text()='Select City']"
+    BANGALORE_OPTION = "//span[@title='Bangalore, Bangalore, Karnataka, India']"
+    PHONE_NUMBER = "//label[text()='Phone Number']"
+    PROFILE_TYPE_DROPDOWN = "//label[text()='Profile type']"
+    PROFILE_TYPE_OPTION = "//span[text()='Exploring a new venture']"
+    SUBMIT_BUTTON = "//span[text()='Submit']"
+    HOME = "(//div[text()='Home'])[1]"
+    MY_PROFILE_ICON = "//div[@class='ml-3 profile_container']"
+
+
+
+

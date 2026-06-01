@@ -9,7 +9,7 @@ class IncubatorEventsPage:
         self.page = page
         self.locators = events_locators()
 
-    def _wait_and_click(self, locator, timeout=15000):
+    def _wait_and_click(self, locator, timeout=15000, force=False):
         element = self.page.locator(locator)
         elapsed = 0
 
@@ -17,8 +17,8 @@ class IncubatorEventsPage:
             count = element.count()
             for idx in range(count):
                 candidate = element.nth(idx)
-                if candidate.is_visible():
-                    candidate.click()
+                if force or candidate.is_visible():
+                    candidate.click(force=True)
                     return
 
             self.page.wait_for_timeout(200)
@@ -96,26 +96,14 @@ class IncubatorEventsPage:
             self._wait_and_fill(self.locators.EVENT_NAME, "Test Event")
 
             # Language dropdown
-            self._wait_and_click(self.locators.LANGUAGE_SELECTION)
-            self.page.wait_for_timeout(300)
+            self._wait_and_click(self.locators.LANGUAGE_SELECTION, force=True)
+            self.page.wait_for_timeout(800)
             self._wait_and_click(self.locators.LANGUAGE_OPTION)
 
             # Event type dropdown
-            self._wait_and_click(self.locators.EVENT_TYPE_SELECTION)
-            self.page.wait_for_timeout(300)
+            self._wait_and_click(self.locators.EVENT_TYPE_SELECTION, force=True)
+            self.page.wait_for_timeout(800)
             try:
-                for i in range(3):  # Retry mechanism for event type option
-                    try:
-                        if i == 0:
-                            self._wait_and_click(self.locators.EVENT_TYPE_OPTION)
-                        elif i == 1:
-                            self._wait_and_click("(//span[text()='Meeting'])[1]")  # Ensure correct option is clicked
-                        elif i == 2:
-                            self._wait_and_click("(//a[text()='Meeting'])[1]")  # Final click to select the option
-                        break  # Break loop if click is successful
-                    except Exception as exc:
-                        print(f"Attempt {i+1}: Event type option not clickable: {exc}")
-                        self.page.wait_for_timeout(1000)  # Wait before retrying
                 self._wait_and_click(self.locators.EVENT_TYPE_OPTION)
             except Exception as exc:
                 attach_screenshot(self.page, "Event Type Option Not Found or Not Clickable")
@@ -206,36 +194,50 @@ class IncubatorEventsPage:
             )
             abs_path = os.path.abspath(file_path)
 
-            with self.page.expect_file_chooser() as fc_info:
-                self._wait_and_click(self.locators.BULK_UPLOAD_INVITATION_BUTTON)
-            file_chooser = fc_info.value
-            file_chooser.set_files(abs_path)
-
+            self._wait_and_click(self.locators.BULK_UPLOAD_INVITATION_BUTTON)
             self.page.wait_for_timeout(500)
-            self.page.locator(self.locators.CHOOSE_FILE_INPUT).set_input_files(abs_path)
+
+            file_input = self.page.locator(self.locators.CHOOSE_FILE_INPUT)
+            if file_input.count() > 0:
+                file_input.first.set_input_files(abs_path)
+            else:
+                with self.page.expect_file_chooser() as fc_info:
+                    self._wait_and_click(self.locators.BULK_UPLOAD_INVITATION_BUTTON)
+                fc_info.value.set_files(abs_path)
+
             self.page.locator(self.locators.UPLOAD_BUTTON).click()
             self.page.wait_for_timeout(1000)
             self.page.locator(self.locators.DOWNLOAD_BUTTON)
             self.page.wait_for_timeout(500)
             self.page.locator(self.locators.CLOSE_MODAL_BUTTON).click()
-            self._wait_and_click(self.locators.SUBMIT_BUTTON)
+
+            submit_buttons = self.page.locator(self.locators.SUBMIT_BUTTON)
+            clicked_submit = False
+            for idx in range(submit_buttons.count()):
+                candidate = submit_buttons.nth(idx)
+                if candidate.is_visible() and candidate.is_enabled():
+                    candidate.click(force=True)
+                    clicked_submit = True
+                    break
+
+            if not clicked_submit:
+                print("Incubator bulk upload: visible submit button not found, continuing")
+
             self.page.wait_for_timeout(1000)
-            self.page.go_back() 
 
         except Exception as exc:
             attach_screenshot(self.page, "Incubator Bulk Upload Invitation Failed")
             print(f"Incubator bulk upload invitation failed: {exc}")
-            self.page.go_back()
 
 
     def delete_created_event(self):
         try:
-            try:
-                self._wait_and_click(self.locators.DRAFT_TAB)
-                self.page.wait_for_timeout(500)
-            except Exception as exc:
-                attach_screenshot(self.page, "Draft Tab Not Found or Not Clickable")
-                print(f"Draft tab not found or not clickable: {exc}")
+        #     try:
+        #         self._wait_and_click(self.locators.DRAFT_TAB)
+        #         self.page.wait_for_timeout(500)
+        #     except Exception as exc:
+        #         attach_screenshot(self.page, "Draft Tab Not Found or Not Clickable")
+        #         print(f"Draft tab not found or not clickable: {exc}")
             # First Delete button opens confirmation; second confirms deletion
             self._wait_and_click(self.locators.DELETE_BUTTON)
             self.page.wait_for_timeout(500)

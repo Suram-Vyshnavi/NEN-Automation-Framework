@@ -115,6 +115,7 @@ class EvaluatorVenturePage:
             raise AssertionError(f"Failed to validate Milestone heading: {exc}") from exc
 
     def validate_viability_evaluation_heading(self):
+        _error = None
         try:
             self._wait_and_assert_visible(
                 self.locators.VIABILITY_EVALUATION_HEADING,
@@ -123,8 +124,13 @@ class EvaluatorVenturePage:
             highlight_element(self.page, self.locators.VIABILITY_EVALUATION_HEADING)
         except Exception as exc:
             attach_screenshot(self.page, "Evaluator Viability Evaluation Heading Validation Failed", force=True)
-            raise AssertionError(f"Failed to validate Viability Evaluation heading: {exc}") from exc
-        self.page.go_back()
+            _error = exc
+        try:
+            self.page.go_back()
+        except Exception:
+            pass
+        if _error is not None:
+            raise AssertionError(f"Failed to validate Viability Evaluation heading: {_error}") from _error
 
     def click_completed_evaluations(self):
         try:

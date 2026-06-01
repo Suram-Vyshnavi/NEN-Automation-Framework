@@ -1,5 +1,6 @@
 ﻿from locators.common.header_locators import HeaderLocators
 from locators.common.login_locators import LoginLocators
+from utils.config import Config
 from utils.helpers import attach_screenshot, highlight_element
 
 
@@ -58,12 +59,42 @@ class NavigationPage:
         except Exception:
             pass
 
+    def _click_home_if_visible(self, locator, timeout=4000):
+        home = self.page.locator(locator)
+        if home.count() > 0:
+            home.first.wait_for(state="visible", timeout=timeout)
+            home.first.click()
+            return True
+        return False
+
     def navigate_to_home_page(self):
         try:
             self.close_modal_if_open()
-            home_header = self.page.locator(self.header_locators.HOME_HEADER)
-            home_header.wait_for(state="visible", timeout=10000)
-            self.page.click(self.header_locators.HOME_HEADER)
+            try:
+                self.page.keyboard.press("Escape")
+            except Exception:
+                pass
+
+            for close_locator in [
+                "//span[@class='ant-modal-close-x']",
+                "//button[contains(@class,'ant-drawer-close')]",
+                "//span[contains(@class,'ant-drawer-close')]",
+            ]:
+                try:
+                    close_btn = self.page.locator(close_locator)
+                    if close_btn.count() > 0 and close_btn.first.is_visible():
+                        close_btn.first.click()
+                        self.page.wait_for_timeout(300)
+                except Exception:
+                    pass
+
+            if self._click_home_if_visible(self.header_locators.HOME_HEADER):
+                return
+
+            if self._click_home_if_visible(self.login_locators.HOME):
+                return
+
+            self.page.goto(Config.BASE_URL)
         except Exception as e:
             attach_screenshot(self.page, "Navigate to Home Page Failed")
             print(f"Failed to navigate to home page: {e}")

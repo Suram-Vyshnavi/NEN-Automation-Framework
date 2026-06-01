@@ -9,15 +9,34 @@ class IncubatorProgramManagersPage:
         self.page = page
         self.locators = program_managers_locators()
 
-    def _wait_and_click(self, locator, timeout=15000):
+    def _wait_and_click(self, locator, timeout=15000, force=False):
         element = self.page.locator(locator)
-        element.first.wait_for(state="visible", timeout=timeout)
-        element.first.click()
+        state = "attached" if force else "visible"
+        element.first.wait_for(state=state, timeout=timeout)
+        if force:
+            element.first.evaluate("el => el.click()")
+        else:
+            element.first.click()
 
     def _wait_and_fill(self, locator, value, timeout=15000):
         element = self.page.locator(locator)
         element.first.wait_for(state="visible", timeout=timeout)
         element.first.fill(str(value))
+
+    def _select_dropdown_option(self, selector_locator, search_input_locator, option_locator, value):
+        """Select an option from an Ant Design searchable dropdown."""
+        self._wait_and_click(selector_locator, force=True)
+        search_input = self.page.locator(search_input_locator).first
+        search_input.wait_for(state="attached", timeout=10000)
+        search_input.fill(str(value))
+
+        option = self.page.locator(option_locator)
+        if option.count() > 0:
+            option.first.wait_for(state="visible", timeout=10000)
+            option.first.click()
+        else:
+            # Fallback for virtualized lists where option text node is transient.
+            search_input.press("Enter")
 
     def click_profile_icon(self):
         try:
@@ -65,15 +84,21 @@ class IncubatorProgramManagersPage:
             self._wait_and_fill(self.locators.EMAIL_INPUT, f"test.pm.{unique_suffix}@mailinator.com")
             self._wait_and_fill(self.locators.MOBILE_NUMBER_INPUT, "9876543210")
 
-            self._wait_and_click(self.locators.SELECT_COUNTRY, "India")
-            self.page.wait_for_timeout(1000)
-            self._wait_and_click(self.locators.INDIA_OPTION)
-            self.page.wait_for_timeout(1000)
+            self._select_dropdown_option(
+                self.locators.SELECT_COUNTRY,
+                "//label[text()='Select Country']/following::input[contains(@class,'ant-select-selection-search-input')][1]",
+                self.locators.INDIA_OPTION,
+                "India",
+            )
+            self.page.wait_for_timeout(800)
 
-            self._wait_and_click(self.locators.SELECT_CITY, "Bangalore, Bangalore, Karnataka, India")
-            self.page.wait_for_timeout(1000)
-            self._wait_and_click(self.locators.BANGALORE_OPTION)
-            self.page.wait_for_timeout(1000)
+            self._select_dropdown_option(
+                self.locators.SELECT_CITY,
+                "//label[text()='Select City']/following::input[contains(@class,'ant-select-selection-search-input')][1]",
+                self.locators.BANGALORE_OPTION,
+                "Bangalore",
+            )
+            self.page.wait_for_timeout(800)
 
             self._wait_and_click(self.locators.CREATE_BUTTON)
             self.page.wait_for_timeout(1000)

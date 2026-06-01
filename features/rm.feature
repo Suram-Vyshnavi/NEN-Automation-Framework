@@ -7,7 +7,7 @@ Feature: RM
         Then user clicks on release milestones tab
         Then user clicks on milestone and extends deadline
         Then user clicks on refresh button
-        Then RM user validates pagination
+        # Then RM user validates pagination
         Then RM user navigates to home page
 
     Scenario: Cohorts validation

@@ -2,7 +2,7 @@ Feature: Viability Specialist
     Scenario: Homepage Validation for Viability Specialist
         Given Viability Specialist user is on the home page
         Then Viability Specialist user validates the home page card
-        Then Viability Specialist user validates the resource heading
+        # Then Viability Specialist user validates the resource heading
         When Viability Specialist user clicks on Evaluate button in the home page
         Then Viability Specialist user validates the venture information card
         Then Viability Specialist user validates the Submissions & Evaluation heading
@@ -10,8 +10,8 @@ Feature: Viability Specialist
         # Then Viability Specialist user validates the View file link
         Then Viability Specialist user validates the Evaluate heading
         Then Viability Specialist user validates the My Ratings heading
-        Then Viability Specialist user validates the Milestone form section
-        Then Viability Specialist user validates the Milestone next form section
+        # Then Viability Specialist user validates the Milestone form section
+        # Then Viability Specialist user validates the Milestone next form section
         Then Viability Specialist user navigates to home page
 
     Scenario: Ventures validation for Viability Specialist

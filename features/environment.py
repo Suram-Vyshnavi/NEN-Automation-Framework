@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 import os
 import traceback
-from pages.common.login_page import LoginPage
+from pages.Student.login_page import LoginPage
 from utils.helpers import attach_screenshot, set_report_context
 
 # Global flag to track if setup is done
@@ -326,7 +326,7 @@ def before_all(context):
 
         # Validate successful login
         login_page.validate_successful_login()
-        print("✓ User Login Completed")
+        print("[OK] User Login Completed")
 
         setup_complete = True
         print("\n========== STEP 3: Running Test Scenarios ==========")
@@ -392,7 +392,7 @@ def after_all(context):
         if getattr(context, "page", None):
             login_page = LoginPage(context.page)
             login_page.logout()
-            print("✓ User Logout Completed")
+            print("[OK] User Logout Completed")
         else:
             print("Skipping logout: page was not initialized")
     except Exception as e:

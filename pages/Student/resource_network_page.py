@@ -83,25 +83,32 @@ class ResourceNetworkPage:
                     time_slot.wait_for(state="visible", timeout=10000)
                     self.page.click(self.locators.SELECT_TIME_SLOT)
                     break
+            if self.page.locator(self.locators.SELECT_TIME_SLOT).is_visible():
+                
+                startup_info = self.page.locator(self.locators.STARTUPINFORMATION_TEXT)
+                startup_info.wait_for(state="visible", timeout=5000)
+                self.page.fill(self.locators.STARTUPINFORMATION_TEXT, "test startup")
 
-            startup_info = self.page.locator(self.locators.STARTUPINFORMATION_TEXT)
-            startup_info.wait_for(state="visible", timeout=5000)
-            self.page.fill(self.locators.STARTUPINFORMATION_TEXT, "test startup")
+                startup_stage = self.page.locator(self.locators.WHICH_STAGETEXT)
+                startup_stage.wait_for(state="visible", timeout=5000)
+                self.page.click(self.locators.WHICH_STAGETEXT)
+                scaling_option = self.page.locator(self.locators.SCALING_OPTION)
+                scaling_option.wait_for(state="visible", timeout=5000)
+                self.page.click(self.locators.SCALING_OPTION)
 
-            startup_stage = self.page.locator(self.locators.WHICH_STAGETEXT)
-            startup_stage.wait_for(state="visible", timeout=5000)
-            self.page.click(self.locators.WHICH_STAGETEXT)
-            scaling_option = self.page.locator(self.locators.SCALING_OPTION)
-            scaling_option.wait_for(state="visible", timeout=5000)
-            self.page.click(self.locators.SCALING_OPTION)
+                linkedin_url = self.page.locator(self.locators.LINKEDIN_URL)
+                linkedin_url.wait_for(state="visible", timeout=5000)
+                self.page.fill(self.locators.LINKEDIN_URL, "https://www.linkedin.com/in/testprofile")
 
-            linkedin_url = self.page.locator(self.locators.LINKEDIN_URL)
-            linkedin_url.wait_for(state="visible", timeout=5000)
-            self.page.fill(self.locators.LINKEDIN_URL, "https://www.linkedin.com/in/testprofile")
-
-            meeting_expectation = self.page.locator(self.locators.MEETING_EXPECTATION_TEXTAREA)
-            meeting_expectation.wait_for(state="visible", timeout=5000)
-            self.page.fill(self.locators.MEETING_EXPECTATION_TEXTAREA, "test expectation")
+                meeting_expectation = self.page.locator(self.locators.MEETING_EXPECTATION_TEXTAREA)
+                meeting_expectation.wait_for(state="visible", timeout=5000)
+                self.page.fill(self.locators.MEETING_EXPECTATION_TEXTAREA, "test expectation")
+            else:
+                attach_screenshot(self.page, "No Slots Available")
+                print("No slots available to select")
+                close_button = self.page.locator("//span[@class='anticon anticon-close ant-modal-close-icon']")
+                close_button.wait_for(state="visible", timeout=5000)
+                close_button.click()
 
         except Exception as e:
             attach_screenshot(self.page, "Select Slot and Provide Startup Information Failed")

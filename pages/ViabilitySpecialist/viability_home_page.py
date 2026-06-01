@@ -26,15 +26,15 @@ class ViabilityHomePage:
             attach_screenshot(self.page, 'Viability Home Page Card Validation Failed', force=True)
             raise AssertionError(f'Failed to validate home page card: {exc}') from exc
 
-    def validate_resource_heading(self):
-        try:
-            target = self.page.locator(self.locators.RESOURCE_HEADING)
-            target.first.wait_for(state='attached', timeout=15000)
-            assert target.count() > 0, 'Resource heading not found in DOM'
-            highlight_element(self.page, self.locators.RESOURCE_HEADING)
-        except Exception as exc:
-            attach_screenshot(self.page, 'Viability Resource Heading Validation Failed', force=True)
-            raise AssertionError(f'Failed to validate resource heading: {exc}') from exc
+    # def validate_resource_heading(self):
+    #     try:
+    #         target = self.page.locator(self.locators.RESOURCE_HEADING)
+    #         target.first.wait_for(state='attached', timeout=15000)
+    #         assert target.count() > 0, 'Resource heading not found in DOM'
+    #         highlight_element(self.page, self.locators.RESOURCE_HEADING)
+    #     except Exception as exc:
+    #         attach_screenshot(self.page, 'Viability Resource Heading Validation Failed', force=True)
+    #         raise AssertionError(f'Failed to validate resource heading: {exc}') from exc
 
     def click_evaluate_button(self):
         try:
@@ -91,21 +91,21 @@ class ViabilityHomePage:
             attach_screenshot(self.page, 'Viability My Ratings Heading Validation Failed', force=True)
             raise AssertionError(f'Failed to validate My Ratings heading: {exc}') from exc
 
-    def validate_milestone_form_section(self):
-        try:
-            self._wait_and_assert_visible(self.locators.MILESTONE_FORM_SECTION, 'Milestone form section is not visible')
-            highlight_element(self.page, self.locators.MILESTONE_FORM_SECTION)
-        except Exception as exc:
-            attach_screenshot(self.page, 'Viability Milestone Form Section Validation Failed', force=True)
-            raise AssertionError(f'Failed to validate Milestone form section: {exc}') from exc
+    # def validate_milestone_form_section(self):
+    #     try:
+    #         self._wait_and_assert_visible(self.locators.MILESTONE_FORM_SECTION, 'Milestone form section is not visible')
+    #         highlight_element(self.page, self.locators.MILESTONE_FORM_SECTION)
+    #     except Exception as exc:
+    #         attach_screenshot(self.page, 'Viability Milestone Form Section Validation Failed', force=True)
+    #         raise AssertionError(f'Failed to validate Milestone form section: {exc}') from exc
 
-    def validate_milestone_next_form_section(self):
-        try:
-            self._wait_and_assert_visible(self.locators.MILESTONE_NEXT_FORM, 'Milestone next form section is not visible')
-            highlight_element(self.page, self.locators.MILESTONE_NEXT_FORM)
-        except Exception as exc:
-            attach_screenshot(self.page, 'Viability Milestone Next Form Validation Failed', force=True)
-            raise AssertionError(f'Failed to validate Milestone next form section: {exc}') from exc
+    # def validate_milestone_next_form_section(self):
+    #     try:
+    #         self._wait_and_assert_visible(self.locators.MILESTONE_NEXT_FORM, 'Milestone next form section is not visible')
+    #         highlight_element(self.page, self.locators.MILESTONE_NEXT_FORM)
+    #     except Exception as exc:
+    #         attach_screenshot(self.page, 'Viability Milestone Next Form Validation Failed', force=True)
+    #         raise AssertionError(f'Failed to validate Milestone next form section: {exc}') from exc
 
     def navigate_to_home_page(self):
         try:

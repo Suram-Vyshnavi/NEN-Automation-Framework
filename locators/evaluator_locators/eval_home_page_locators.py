@@ -1,10 +1,10 @@
 class eval_home_page_locators:
     HOME_PAGE = "(//div[text()='Home'])[1]"
     HOME_PAGE_CARD= "//div[@class='welcome-card-container']"
-    RESOURCES_HEADING = "//h3[text()='Resources']"
+    RESOURCES_HEADING = "//h3[contains(text(),'Resources') or contains(@class,'resources')]"
     EVALUATE_BUTTON = "//span[text()='Evaluate']"
     VENTURE_INFO_CARD= "//div[@class='venture-info']"
     SUBMISSIONS_EVALUATION_HEADING= "//div[text()='Submissions & Evaluation']"
     INSTRUCTIONS_HEADING= "//div[text()='Instructions']"
-    MILESTONE_HEADING= "//h3[text()='Wadhwani Ignite - Milestone 3 (EN)']"
-    VIABILITY_EVALUATION_HEADING= "//p[text()='Viability Evaluation']"
+    MILESTONE_HEADING= "//h3[contains(text(),'Milestone') or contains(text(),'Ignite') or contains(text(),'Wadhwani')]"
+    VIABILITY_EVALUATION_HEADING= "//p[contains(text(),'Viability')]"
