@@ -14,6 +14,7 @@ class LoginPage:
 			login_btn.wait_for(state="visible", timeout=10000)
 			self.page.click(self.locators.LOGIN_BUTTON)
 			self.page.click(self.locators.PROGRAM_MEMBER)
+			self.page.click(self.locators.HAVING_ACCOUNT_SIGN_IN)
 		except Exception as e:
 			attach_screenshot(self.page, "Click Login Button Failed")
 			print(f"Failed to click login button: {e}")

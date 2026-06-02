@@ -1,7 +1,7 @@
 class LoginLocators:
 	LOGIN_BUTTON = "//button[text()='Login']"
 	PROGRAM_MEMBER = "//h3[text()='Program member']"
-	
+	HAVING_ACCOUNT_SIGN_IN = "//span[text()='Sign In']"
 	EMAIL_INPUT = "//input[@id='email']"
 	PASSWORD_INPUT = "//input[@id='password']"
 	SIGN_IN = "//span[text()='Sign In']"
